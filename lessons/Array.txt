@@ -1,0 +1,133 @@
+
+#include <iostream>
+
+using namespace std;
+//Создайте класс Array(или используйте ранее созданный вами).
+//Класс Array – это класс динамического массива.Размер массива 
+// может быть передан в качестве параметра или задан с помощью 
+// вызова функции - члена.Класс должен позволять заполнять
+//массив значениями, отображать содержимое массива, изменять
+//размер массива, сортировать массив, определять минимальное
+//и максимальное значение.Класс должен содержать набор 
+//конструкторов(конструктор копирования обязателен), деструктор.
+class Array
+{
+	int* pointer;
+	int size;
+
+public:
+
+	Array(int _size) 
+		: size{ _size }, pointer{nullptr} 
+	{
+		if( _size!=0) this->pointer = new int[this->size];
+		else { size = 0; pointer=nullptr; }
+	}
+
+	Array(const Array& arr) 
+		: size{ 0 }, pointer{nullptr} 
+	{
+		if (arr.size != 0) {
+			this->size = arr.size;
+			this->pointer = new int[this->size];
+			for (int i = 0; i < size; i++)
+			{
+				this->pointer[i] = arr.pointer[i];
+			}
+		}
+		else { 
+			size = 0; 
+			pointer = nullptr; 
+		}
+	}
+	
+	Array() : Array(0){}
+
+	~Array() {
+		if (this->pointer != nullptr) {
+			delete[] pointer;
+		}
+	}
+
+	void fillArrayAuto() {
+		for (int i = 0; i < this->size; i++)
+			this->pointer[i] = rand() % 10;
+	}
+	void fillArrayManual() {
+		for (int i = 0; i < this->size; i++) {
+			cout << "Enter number #" << i + 1 << ": ";
+			cin >> this->pointer[i];
+		}
+	}
+
+	int minArray() {
+		int temp = this->pointer[0];
+		for (int i = 0; i < this->size; i++)
+			if (temp > this->pointer[i]) temp = *this->pointer;
+		return temp;
+	}
+	int maxArray() {
+		int temp = this->pointer[0];
+		for (int i = 0; i < this->size; i++)
+			if (temp < this->pointer[i]) temp = *this->pointer;
+		return temp;
+	}
+
+	void sort()
+	{
+		int i, j;
+		for (i = 0; i < this->size - 1; i++)
+			for (j = 0; j < this->size - i - 1; j++)
+				if (this->pointer[j] > this->pointer[j + 1])
+					swap(this->pointer[j], this->pointer[j + 1]);
+
+	}
+
+	void info() {
+		cout << "Array: ";
+		for (int i = 0; i < this->size; i++)
+			cout<<this->pointer[i]<<" ";
+	}
+
+	//!!!
+	void changeSize(int _size) {
+		if (_size > 0) {
+			int* t = new int[_size];
+			for (int i = 0; i < _size; i++)
+			{
+				t[i] = this->pointer[i];
+				if (this->size <= i) {
+					t[i] = 0;
+				}
+			}
+			delete[] pointer;
+			this->pointer = t;
+			this->size = _size;
+		}
+	}
+
+	void setSize(int _size) {
+		this->size = _size;
+		this->pointer = new int[this->size];
+
+	}
+	int getSize() {
+		return this->size;
+	}
+
+};
+
+
+int main()
+{
+	Array arr;
+	arr.setSize(5);
+	arr.fillArrayAuto();
+	arr.info();
+	arr.changeSize('A');
+
+	arr.info();
+
+	system("pause");
+	return 0;
+}
