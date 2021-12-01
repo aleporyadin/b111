@@ -1,0 +1,107 @@
+
+#include <iostream>
+#include <ctime>
+using namespace std;
+
+
+class Date
+{
+public:
+
+	int day;
+	int month;
+	int year;
+
+
+	Date(int dayP, int monthP, int yearP)
+		: day{ dayP }, month{ monthP }, year{ yearP }
+	{}
+
+	Date() : Date(1, 1, 1970) {}
+
+	void info() {
+		std::cout << day << '.' << month << '.'
+			<< year << '\n';
+	}
+
+	Date& setDay(int dayP) { 
+		day = dayP; 
+		return *this; 
+	}
+	Date& setMonth(int monthP) {
+		month = monthP;
+		return *this;
+	}
+	Date& setYear(int yearP) {
+		year = yearP;
+		return *this;
+	}
+};
+
+class Person
+{
+public:
+	string name;
+	int age;
+	int id;
+	Date birthday;
+
+	static int count;
+
+	//constructor() : val{N},..N{V} {}
+	Person(string _name, int _age, Date _birthday) 
+		: id{count},name {_name}, age{ _age }, birthday{ _birthday }
+	{
+		count++;
+	}
+
+	Person(const Person& person) : Person(person.name,person.age,person.birthday){
+	
+	}
+
+	Person() : Person("", 0, Date{0,0,0})
+	{}
+
+
+
+
+	void info() {
+		cout <<"\nID: "<<this->id<< "\nName: " << this->name << "\nAge" << this->age;
+		cout<<"\nBirthday: " << this->birthday.day << "." << this->birthday.month << "." << this->birthday.year << "\n";
+	}
+
+	static void setCount(int num) {
+		count = num;
+	}
+	static int getCount() {
+		return count;
+	}
+
+	~Person() {
+		
+	}
+};
+
+int Person::count{ 0 };
+
+int main()
+{
+	
+	Date bd{1,1,1};
+	Person::setCount(0);
+
+	Person p1{"Alex", 5,bd};
+	Person p2{"John",10,bd};
+	Person p3{"Antonio",11,bd };
+	Person p4{ p1 };
+	
+	
+
+	p1.info();
+	p2.info();
+	p3.info();
+	p4.info();
+	cout << "Count person: " << Person::getCount() << endl;
+	system("pause");
+	return 0;
+}
